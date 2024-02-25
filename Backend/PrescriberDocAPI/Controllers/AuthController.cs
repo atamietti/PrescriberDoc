@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using MongoDB.Bson.Serialization.IdGenerators;
 using PrescriberDocAPI.UserManagement.Application;
+using PrescriberDocAPI.UserManagement.Domain;
 using PrescriberDocAPI.UserManagement.Domain.UserAggregate;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -12,17 +12,19 @@ using System.Text;
 namespace PrescriberDocAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/authenticate")]
-public class AuthenticationController : ControllerBase
+[Route("api/v1/auth")]
+public class AuthController : ControllerBase
 {
 
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly RoleManager<ApplicationRole> _roleManager;
+    private readonly UserConfig _userConfig;
 
-    public AuthenticationController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager)
+    public AuthController(UserManager<ApplicationUser> userManager, RoleManager<ApplicationRole> roleManager, UserConfig userConfig)
     {
         _userManager = userManager;
         _roleManager = roleManager;
+        _userConfig = userConfig;
     }
 
     [HttpPost]
@@ -126,7 +128,7 @@ public class AuthenticationController : ControllerBase
             var roleClaims = roles.Select(x => new Claim(ClaimTypes.Role, x));
             claims.AddRange(roleClaims);
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9125a3cf-38cb-4fe0-8be2-ea7758d11eb0"));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_userConfig.IssuerSigningKey));
 
             var token = new JwtSecurityToken(
                 issuer: "https://localhost:5001",

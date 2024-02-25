@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
+using PrescriberDocAPI.Patients.Domain;
+using PrescriberDocAPI.Patients.Infrastructure;
+using PrescriberDocAPI.UserManagement.Domain;
 using PrescriberDocAPI.UserManagement.Domain.UserAggregate;
 using System.Text;
 
@@ -23,12 +26,21 @@ namespace PrescriberDocAPI
             BsonSerializer.RegisterSerializer(new DateTimeSerializer(MongoDB.Bson.BsonType.String));
             BsonSerializer.RegisterSerializer(new DateTimeOffsetSerializer(MongoDB.Bson.BsonType.String));
 
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+            .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json")
+            .Build();
+            var issuerkey = configuration["PrecriberDocConfig:IssuerSigningKey"] ?? string.Empty;
+
+            builder.Services.AddSingleton(new UserConfig { IssuerSigningKey = issuerkey });
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
             var mongDbIdentityConfig = new MongoDbIdentityConfiguration
             {
                 MongoDbSettings = new MongoDbSettings
                 {
-                    ConnectionString = "mongodb://localhost:27017",
-                    DatabaseName = "prescribedocdb",
+                    ConnectionString = configuration["PrecriberDocConfig:MongoDBConnectionString"],
+                    DatabaseName = configuration["PrecriberDocConfig:DatabaseName"],
 
                 },
                 IdentityOptionsAction = options =>
@@ -47,7 +59,7 @@ namespace PrescriberDocAPI
 
             builder.Services.ConfigureMongoDbIdentity<ApplicationUser, ApplicationRole, Guid>(mongDbIdentityConfig)
                 .AddUserManager<UserManager<ApplicationUser>>()
-                .AddSignInManager<SignInManager <ApplicationUser>>()
+                .AddSignInManager<SignInManager<ApplicationUser>>()
                 .AddRoleManager<RoleManager<ApplicationRole>>()
                 .AddDefaultTokenProviders();
 
@@ -66,9 +78,9 @@ namespace PrescriberDocAPI
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    ValidIssuer = "https://localhost:5001",
-                    ValidAudience = "https://localhost:5001",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("9125a3cf-38cb-4fe0-8be2-ea7758d11eb0")),
+                    ValidIssuer = configuration["PrecriberDocConfig:ValidIssuer"],
+                    ValidAudience = configuration["PrecriberDocConfig:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(issuerkey)),
                     ClockSkew = TimeSpan.Zero
                 };
 
@@ -76,6 +88,7 @@ namespace PrescriberDocAPI
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddAuthorization();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
@@ -94,6 +107,11 @@ namespace PrescriberDocAPI
 
 
             app.MapControllers();
+
+            var mapMethod = typeof(CrudBase).GetMethod(nameof(CrudBase.MapType));
+            foreach (var type in CrudBase.RegisteredTypes)
+                mapMethod?.MakeGenericMethod(type).Invoke(null, new object?[] { app });
+
 
             app.Run();
         }

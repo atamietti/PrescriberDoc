@@ -9,4 +9,5 @@ public class LoginRequest
 
     [Required, DataType(DataType.Password)]
     public string Password { get; set; } = string.Empty;
+
 }
