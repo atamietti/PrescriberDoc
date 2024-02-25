@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <Folder Include="Patients\Application\" />
-    <Folder Include="Shared\Domain\" />
   </ItemGroup>
 
 </Project>

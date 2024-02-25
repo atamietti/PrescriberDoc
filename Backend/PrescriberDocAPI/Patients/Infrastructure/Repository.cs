@@ -15,11 +15,19 @@ namespace PrescriberDocAPI.Patients.Infrastructure
             var mongoDatabase = mongoClient.GetDatabase(userConfig.DatabaseName);
             _colection = mongoDatabase.GetCollection<T>(typeof(T).Name);
         }
+
+        public Repository(IMongoClient mongoClient, UserConfig userConfig)
+        {
+
+            var mongoDatabase = mongoClient.GetDatabase(userConfig.DatabaseName);
+            _colection = mongoDatabase.GetCollection<T>(typeof(T).Name);
+        }
+
         public async Task<T> Create(T request)
         {
             try
             {
-                await _colection.InsertOneAsync(request);
+                await _colection.InsertOneAsync(request, null, default(CancellationToken));
 
                 if (!string.IsNullOrWhiteSpace(request.Id))
                     return request;
@@ -32,8 +40,6 @@ namespace PrescriberDocAPI.Patients.Infrastructure
                 return (T)CrudBase.CreateErrorMessage($"Cannot create {typeof(T).Name}", ex);
             }
         }
-
-
 
         public async Task<T> Delete(string id)
         {
@@ -54,23 +60,22 @@ namespace PrescriberDocAPI.Patients.Infrastructure
             }
         }
 
-
         public async Task<IEnumerable<T>> Get()
         {
             try
             {
-                var r = _colection.Find(new BsonDocument());
+                var r = await _colection.FindAsync(new BsonDocument(), null, default(CancellationToken));
                 var response = await r.ToListAsync();
 
                 if (response?.Any() ?? false)
                     return response;
 
-                return (IEnumerable<T>)CrudBase.CreateErrorMessage($"Cannot get {typeof(T).Name}");
+                return new List<T> { };
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return (IEnumerable<T>)CrudBase.CreateErrorMessage($"Cannot get {typeof(T).Name}", ex);
+                return new List<T> { };
             }
         }
 

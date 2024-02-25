@@ -2,10 +2,9 @@
 
 namespace PrescriberDocAPI.Patients.Domain;
 [BsonIgnoreExtraElements]
-public class Drug : CrudBase
+public class Medicine : CrudBase
 {
 
-   
     [BsonRequired]
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
