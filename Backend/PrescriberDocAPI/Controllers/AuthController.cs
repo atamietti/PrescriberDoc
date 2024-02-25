@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using PrescriberDocAPI.Shared.Domain;
 using PrescriberDocAPI.UserManagement.Application;
-using PrescriberDocAPI.UserManagement.Domain;
 using PrescriberDocAPI.UserManagement.Domain.UserAggregate;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
@@ -12,7 +12,7 @@ using System.Text;
 namespace PrescriberDocAPI.Controllers;
 
 [ApiController]
-[Route("api/v1/auth")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
 

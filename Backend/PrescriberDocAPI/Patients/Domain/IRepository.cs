@@ -4,8 +4,8 @@
     {
         Task<T> Get(string id);
         Task<IEnumerable<T>> Get();
-        Task<bool> Create(T request);
-        Task<bool> Update(string id, T request);
-        Task<bool> Delete(string id);
+        Task<T> Create(T request);
+        Task<T> Update(string id, T request);
+        Task<T> Delete(string id);
     }
 }

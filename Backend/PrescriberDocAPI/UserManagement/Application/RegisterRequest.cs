@@ -11,7 +11,7 @@ namespace PrescriberDocAPI.UserManagement.Application
 
         [Required, DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
-        [Required, DataType(DataType.Password), Compare(nameof(Password), ErrorMessage ="Password do not mach")]
+        [Required, DataType(DataType.Password), Compare(nameof(Password), ErrorMessage = "Password do not mach")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
     }

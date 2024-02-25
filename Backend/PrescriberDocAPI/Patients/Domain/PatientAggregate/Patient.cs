@@ -1,9 +1,12 @@
-﻿namespace PrescriberDocAPI.Patients.Domain;
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace PrescriberDocAPI.Patients.Domain;
+[BsonIgnoreExtraElements]
 
 public class Patient : CrudBase
 {
    
     public string DoctorId { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    public List<Drug> Drugs { get; set; } = new List<Drug>();
+    public List<string> Drugs { get; set; } = new List<string>();
 }

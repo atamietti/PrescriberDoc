@@ -3,13 +3,12 @@ using AspNetCore.Identity.MongoDbCore.Extensions;
 using AspNetCore.Identity.MongoDbCore.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using PrescriberDocAPI.Patients.Domain;
 using PrescriberDocAPI.Patients.Infrastructure;
-using PrescriberDocAPI.UserManagement.Domain;
+using PrescriberDocAPI.Shared.Domain;
 using PrescriberDocAPI.UserManagement.Domain.UserAggregate;
 using System.Text;
 
@@ -30,17 +29,22 @@ namespace PrescriberDocAPI
             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
             .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json")
             .Build();
-            var issuerkey = configuration["PrecriberDocConfig:IssuerSigningKey"] ?? string.Empty;
+            var userConfig = new UserConfig
+            {
+                IssuerSigningKey = configuration["PrecriberDocConfig:IssuerSigningKey"] ?? string.Empty,
+                ConnectionStrinfg = configuration["PrecriberDocConfig:MongoDBConnectionString"] ?? string.Empty,
+                DatabaseName = configuration["PrecriberDocConfig:DatabaseName"] ?? string.Empty
+            };
 
-            builder.Services.AddSingleton(new UserConfig { IssuerSigningKey = issuerkey });
+            builder.Services.AddSingleton(userConfig);
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             var mongDbIdentityConfig = new MongoDbIdentityConfiguration
             {
                 MongoDbSettings = new MongoDbSettings
                 {
-                    ConnectionString = configuration["PrecriberDocConfig:MongoDBConnectionString"],
-                    DatabaseName = configuration["PrecriberDocConfig:DatabaseName"],
+                    ConnectionString = userConfig.ConnectionStrinfg,
+                    DatabaseName = userConfig.DatabaseName,
 
                 },
                 IdentityOptionsAction = options =>
@@ -80,7 +84,7 @@ namespace PrescriberDocAPI
                     ValidateLifetime = true,
                     ValidIssuer = configuration["PrecriberDocConfig:ValidIssuer"],
                     ValidAudience = configuration["PrecriberDocConfig:ValidAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(issuerkey)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(userConfig.IssuerSigningKey)),
                     ClockSkew = TimeSpan.Zero
                 };
 
