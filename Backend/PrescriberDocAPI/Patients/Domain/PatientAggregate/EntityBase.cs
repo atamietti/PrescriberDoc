@@ -19,13 +19,11 @@ public class EntityBase
     public bool Success { get; set; } = true;
 
 
-    public static EntityBase CreateErrorMessage(string message, Exception ex = null)
+    public static T CreateErrorMessage<T>(string message, Exception? ex = null) where T : EntityBase
     {
-        return new EntityBase
-        {
-            Success = false,
-            Message = $"{message} {Environment.NewLine}. {ex?.Message ?? string.Empty}",
-
-        };
+        var response = Activator.CreateInstance<T>();
+        response.Success = false;
+        response.Message = $"{message} {Environment.NewLine}. {ex?.Message ?? string.Empty}";
+        return response;
     }
 }

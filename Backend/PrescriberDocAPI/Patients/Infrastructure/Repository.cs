@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using AspNetCore.Identity.MongoDbCore.Infrastructure;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using PrescriberDocAPI.Patients.Domain;
 using PrescriberDocAPI.Shared.Domain;
@@ -23,21 +24,28 @@ namespace PrescriberDocAPI.Patients.Infrastructure
             _colection = mongoDatabase.GetCollection<T>(typeof(T).Name);
         }
 
+        public Repository(IMongoClient mongoClient, MongoDbSettings dbSegtings)
+        {
+
+            var mongoDatabase = mongoClient.GetDatabase(dbSegtings.DatabaseName);
+            _colection = mongoDatabase.GetCollection<T>(typeof(T).Name);
+        }
+
         public async Task<T> Create(T request)
         {
             try
             {
-                await _colection.InsertOneAsync(request, null, default(CancellationToken));
+                await _colection.InsertOneAsync(request);
 
                 if (!string.IsNullOrWhiteSpace(request.Id))
                     return request;
 
-                return (T)CrudBase.CreateErrorMessage($"Cannot create {typeof(T).Name}");
+                return CrudBase.CreateErrorMessage<T>($"Cannot create {typeof(T).Name}");
 
             }
             catch (Exception ex)
             {
-                return (T)CrudBase.CreateErrorMessage($"Cannot create {typeof(T).Name}", ex);
+                return CrudBase.CreateErrorMessage<T>($"Cannot create {typeof(T).Name}", ex);
             }
         }
 
@@ -51,12 +59,12 @@ namespace PrescriberDocAPI.Patients.Infrastructure
                 if (!string.IsNullOrWhiteSpace(response?.Id))
                     return response;
 
-                return (T)CrudBase.CreateErrorMessage($"Cannot delete {typeof(T).Name} {id}");
+                return CrudBase.CreateErrorMessage<T>($"Cannot delete {typeof(T).Name} {id}");
 
             }
             catch (Exception ex)
             {
-                return (T)CrudBase.CreateErrorMessage($"Cannot get {typeof(T).Name} {id}", ex);
+                return CrudBase.CreateErrorMessage<T>($"Cannot get {typeof(T).Name} {id}", ex);
             }
         }
 
@@ -89,12 +97,12 @@ namespace PrescriberDocAPI.Patients.Infrastructure
                 if (!string.IsNullOrWhiteSpace(response?.Id))
                     return response;
 
-                return (T)CrudBase.CreateErrorMessage($"Cannot get {typeof(T).Name}");
+                return CrudBase.CreateErrorMessage<T>($"Cannot get {typeof(T).Name}");
 
             }
             catch (Exception ex)
             {
-                return (T)CrudBase.CreateErrorMessage($"Cannot get {typeof(T).Name}", ex);
+                return CrudBase.CreateErrorMessage<T>($"Cannot get {typeof(T).Name}", ex);
             }
         }
 
@@ -114,12 +122,12 @@ namespace PrescriberDocAPI.Patients.Infrastructure
                 if (!string.IsNullOrWhiteSpace(response.Id))
                     return response;
 
-                return (T)CrudBase.CreateErrorMessage($"Cannot update {typeof(T).Name}");
+                return CrudBase.CreateErrorMessage<T>($"Cannot update {typeof(T).Name}");
 
             }
             catch (Exception ex)
             {
-                return (T)CrudBase.CreateErrorMessage($"Cannot update {typeof(T).Name}", ex);
+                return CrudBase.CreateErrorMessage<T>($"Cannot update {typeof(T).Name}", ex);
             }
         }
     }
