@@ -4,7 +4,7 @@ namespace PrescriberDocAPI.Test
 {
     public static class EntityMocks
     {
-        public static Medicine Medicine { get; set; } = new Medicine
+        public static Drug Drug { get; set; } = new Drug
         {
             Name = "Test Medicine 1",
             Company = "Test Company 1",
@@ -13,11 +13,12 @@ namespace PrescriberDocAPI.Test
             Description = "Test Description 1",
             Message = string.Empty
         };
-        public static List<Medicine> Medicines { get; set; } = new List<Medicine>
-        {
-            Medicine,
 
-            new Medicine
+        public static List<Drug> Drugs { get; set; } = new List<Drug>
+        {
+            Drug,
+
+            new Drug
             {
                 Name = "Test Medicine 2",
                 Company = "Test Company 2",
@@ -31,7 +32,7 @@ namespace PrescriberDocAPI.Test
         public static Patient Patient { get; set; } = new Patient
         {
             Name = "Test Medicine 1",
-            Medicines = new List<string> { "Medicine1", "Medicine2" },
+            Drugs = new List<string> { "Medicine1", "Medicine2" },
             Success = true,
             Message = string.Empty,
             DoctorId = Guid.NewGuid().ToString(),
@@ -45,7 +46,7 @@ namespace PrescriberDocAPI.Test
             new Patient
                     {
                     Name = "Test Medicine 1",
-                    Medicines = new List<string> { "Medicine1", "Medicine2" },
+                    Drugs = new List<string> { "Medicine1", "Medicine2" },
                     Success = true,
                     Message = string.Empty,
                     DoctorId = Guid.NewGuid().ToString(),

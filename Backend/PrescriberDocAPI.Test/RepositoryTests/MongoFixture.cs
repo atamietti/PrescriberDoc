@@ -8,14 +8,14 @@ namespace PrescriberDocAPI.Test.RepositoryTests;
 
 public class MongoFixture<T> : IDisposable where T : CrudBase
 {
-    private Mock<IMongoClient> _mongoClient;
-    private Mock<IMongoDatabase> _mongodb;
-    public Mock<IMongoCollection<T>> EntityCollection;
-    private T _domainEntity;
-    private Mock<IFindFluent<T, T>> _mockFindFluent;
-    private MongoDbSettings _settings;
+    private readonly Mock<IMongoClient> _mongoClient;
+    private readonly Mock<IMongoDatabase> _mongodb;
+    private readonly T _domainEntity;
+    private readonly MongoDbSettings _settings;
     public Repository<T> Repository;
-    public Mock<IAsyncCursor<T>> EntityCursor;
+
+    public readonly Mock<IAsyncCursor<T>> EntityCursor;
+    public readonly Mock<IMongoCollection<T>> EntityCollection;
 
     public MongoFixture()
     {
@@ -24,7 +24,6 @@ public class MongoFixture<T> : IDisposable where T : CrudBase
         EntityCollection = new Mock<IMongoCollection<T>>();
         _mongodb = new Mock<IMongoDatabase>();
         EntityCursor = new Mock<IAsyncCursor<T>>();
-        _mockFindFluent = new Mock<IFindFluent<T, T>>();
         _domainEntity = Activator.CreateInstance<T>();
         InitializeMongoPatientCollection();
     }

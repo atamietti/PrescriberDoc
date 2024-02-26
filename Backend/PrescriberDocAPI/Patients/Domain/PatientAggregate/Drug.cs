@@ -2,7 +2,7 @@
 
 namespace PrescriberDocAPI.Patients.Domain;
 [BsonIgnoreExtraElements]
-public class Medicine : CrudBase
+public class Drug : CrudBase
 {
 
     [BsonRequired]

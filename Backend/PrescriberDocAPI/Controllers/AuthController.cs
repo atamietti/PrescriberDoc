@@ -30,7 +30,7 @@ public class AuthController : ControllerBase
     [HttpPost]
     [Route("register")]
     [ProducesResponseType(typeof(RegisterResponse), (int)HttpStatusCode.OK)]
-    public async Task<IActionResult> Login([FromBody] RegisterRequest request)
+    public async Task<IActionResult> Register([FromBody] RegisterRequest request)
     {
         var result = await RegisterAsync(request);
 
@@ -109,12 +109,17 @@ public class AuthController : ControllerBase
 
         }
     }
+
     private async Task<LoginResponse> LoginAsync(LoginRequest request)
     {
         try
         {
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (string.IsNullOrWhiteSpace(user?.UserName)) return new LoginResponse { Message = "Invalid email/password", Success = false };
+
+            var validPassword = await _userManager.CheckPasswordAsync(user, request.Password);
+
+            if (!validPassword) return new LoginResponse { Message = "Invalid email/password", Success = false };
 
             var claims = new List<Claim>
             {

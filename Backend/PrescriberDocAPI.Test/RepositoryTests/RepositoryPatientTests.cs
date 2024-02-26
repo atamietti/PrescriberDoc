@@ -10,17 +10,14 @@ public class RepositoryPatientTests : IClassFixture<MongoFixture<Patient>>
     public RepositoryPatientTests(MongoFixture<Patient> mongoFixture)
     {
         _mongoFixture = mongoFixture;
-
-       
     }
+
     [Fact]
     public async Task GePatient_ValidData()
     {
-
         _mongoFixture.EntityCursor.Setup(_ => _.Current).Returns(EntityMocks.Patients);
         var response = await _mongoFixture.Repository.Get();
         Assert.Equal(2, response.Count());
-
     }
 
 
