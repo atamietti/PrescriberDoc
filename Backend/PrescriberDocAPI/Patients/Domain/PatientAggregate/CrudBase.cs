@@ -1,9 +1,14 @@
-﻿using System.Reflection;
+﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Reflection;
 
 namespace PrescriberDocAPI.Patients.Domain
 {
     public class CrudBase : EntityBase
     {
+        [BsonRequired]
+        public string Name { get; set; } = string.Empty;
+
+        public virtual string Identification { get; set; }
 
         public static Type[] RegisteredTypes => Assembly.GetExecutingAssembly().GetTypes()?
                     .Where(t => t.IsSubclassOf(typeof(CrudBase)))?.ToArray() ?? Array.Empty<Type>();
@@ -31,6 +36,10 @@ namespace PrescriberDocAPI.Patients.Domain
 
             app.MapPost($"api/{type.Name.ToLower()}/", async (T request, IRepository<T> service) =>
             {
+                if (await service.Any(request.Identification, nameof(request.Identification))) 
+                    return Results.Problem(
+                        detail: $"{typeof(T).Name} {request.Name} id {request.Id} Already exists.",
+                        statusCode: 500);
 
                 var result = await service.Create(request);
                 return result.Success ? Results.Ok(result) : Results.StatusCode(500);

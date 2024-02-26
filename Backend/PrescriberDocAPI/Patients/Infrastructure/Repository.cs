@@ -87,11 +87,11 @@ namespace PrescriberDocAPI.Patients.Infrastructure
             }
         }
 
-        public async Task<T> Get(string id)
+        public async Task<T> Get(string propvalue, string propname = "Id")
         {
             try
             {
-                var filter = Builders<T>.Filter.Eq("Id", id);
+                var filter = Builders<T>.Filter.Eq(propname, propvalue);
                 var response = await _colection.Find(filter).FirstOrDefaultAsync();
 
                 if (!string.IsNullOrWhiteSpace(response?.Id))
@@ -129,6 +129,12 @@ namespace PrescriberDocAPI.Patients.Infrastructure
             {
                 return CrudBase.CreateErrorMessage<T>($"Cannot update {typeof(T).Name}", ex);
             }
+        }
+
+        public async Task<bool> Any(string propvalue, string propname = "Id")
+        {
+            var response = await Get(propvalue, propname);
+            return !string.IsNullOrWhiteSpace(response.Id);
         }
     }
 }
