@@ -1,0 +1,91 @@
+.sidebar{
+    margin:0;
+    padding: 0;
+    background-color: #181c2e;
+    position:fixed;
+    height: 100%;
+    overflow: auto;
+    width: 200px;
+}
+
+.sidebar div{
+    background: url('../../assets/cover.png');
+    background-color: #181c2e;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 150px;
+    padding-top: 30px ;
+}
+.sidebar div label{
+    color:#FFF;
+    font-family: sans-serif;
+    filter: drop-shadow(2px 3px 6px #121212) ;
+}
+.sidebar div img{
+    width: 90px;
+    height: 90px;
+    display: block;
+    margin: auto;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: drop-shadow(2px 3px 6px #121212) ;
+    -webkit-filter:drop-shadow(2px 3px 6px #121212) ;
+}
+
+.sidebar a{
+    padding: 10px ;
+    display: flex;
+    text-decoration: none;
+    color: rgba(255, 255,255, 07);
+    flex-direction: row;
+    align-items: center;
+    transition: ease-in-out 0.4s;
+
+}
+.sidebar a:hover{
+    background-color: #121212;
+    color: #fff
+}
+
+.content{
+    margin-left: 200px;
+    padding:  1px 16px;
+}
+.container{
+    margin-left: 200px;
+    padding:  1px 16px;
+}
+.form-profile input{
+    margin-bottom: 1rem;
+    height: 35px;
+    border-radius: 4px;
+    border: 0;
+    padding: 10px;
+    font-size:15px ;
+    background-color: white;
+}
+.form-profile label{
+    font-size:20px ;
+
+}
+.sidebar span{
+    margin-left: 1em;
+    font-size: 1.em;
+}
+@media screen and (max-width: 700px){
+    .sidebar{
+        width: 100%;
+        height: auto;
+        position:  relative;
+    }
+    div.content{
+        margin-left: left;
+    }
+    .sidebar a{
+        float: left;
+    }
+    .sidebar div{
+        display: none;
+    }
+}
