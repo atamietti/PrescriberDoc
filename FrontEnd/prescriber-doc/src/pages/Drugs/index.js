@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useContext } from "react";
+import { useState, useContext } from "react";
 import { AuthContext } from "../../contexts/auth";
 import Header from "../../components/Header";
 import Title from "../../components/Title";
@@ -17,19 +16,23 @@ export default function Drugs() {
   async function handleRegister(e) {
     e.preventDefault();
     if (drugId !== "" && name !== "") {
-      const  response =await createDrug(drugId, name, description, company, dosage);
-      if(response)
-      {
+      const response = await createDrug(
+        drugId,
+        name,
+        description,
+        company,
+        dosage
+      );
+      if (response) {
         setDrugId("");
         setDescription("");
         setCompany("");
         setDosage("");
         setName("");
       }
-    }else{
-        toast.warning("Fill required fields")
+    } else {
+      toast.warning("Fill required fields");
     }
-
   }
 
   return (
@@ -42,14 +45,18 @@ export default function Drugs() {
       </div>
       <div className="container">
         <form className="form-profile" onSubmit={handleRegister}>
-          <label htmlFor={drugId}><strong>*</strong>Identification Code:</label>
+          <label htmlFor={drugId}>
+            <strong>*</strong>Identification Code:
+          </label>
           <input
             type="text"
             placeholder="Identification Code"
             value={drugId}
             onChange={(e) => setDrugId(e.target.value)}
           />
-          <label htmlFor={name}><strong>*</strong>Drug Name:</label>
+          <label htmlFor={name}>
+            <strong>*</strong>Drug Name:
+          </label>
           <input
             type="text"
             placeholder="Drug Name"

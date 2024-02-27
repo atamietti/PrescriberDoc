@@ -133,6 +133,71 @@ function AuthProvider({ children }) {
     return false;
   }
 
+  async function createPatient(IdentificationCard, name, drugs) {
+ 
+    try {
+      let options = {
+        method: "POST",
+        headers: {
+          "Access-Control-Allow-Origin":"*",
+          "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + user.accessToken,
+        },
+        body: JSON.stringify({
+          IdentificationCard: IdentificationCard,
+          name: name,
+          doctorId: user.email,
+          drugs: drugs,
+        }),
+      };
+      const response = await fetch(PRESCRIBER_API.concat("patient"), options);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.detail);
+      }
+
+      if (data.id !=="" ) {
+   
+        toast.success(data.name.concat(" Saved!"));
+        return true;
+      }
+    } catch (error) {
+      toast.error("Ops! ".concat(error));
+      console.error("Ops! ", error);
+    }
+    return false;
+  }
+  async function getDrugs() {
+
+    try {
+      let options = {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Origin":"*",
+          "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + user.accessToken,
+        },
+        
+      };
+      const response = await fetch(PRESCRIBER_API.concat("drugs"), options);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.detail);
+      }
+
+      if (data.id !=="" ) {
+        return data;
+      }
+    } catch (error) {
+      toast.error("Ops! ".concat(error));
+      setLoadingAuth(false);
+      console.error("Ops! ", error);
+    }
+    return null;
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -144,6 +209,8 @@ function AuthProvider({ children }) {
         loadingAuth,
         loading,
         createDrug,
+        getDrugs,
+        createPatient
       }}
     >
       {children}
