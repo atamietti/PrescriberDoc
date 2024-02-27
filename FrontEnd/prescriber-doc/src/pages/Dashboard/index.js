@@ -13,7 +13,10 @@ export default function Dashboard() {
 
   const [patients, setPatients] = useState("");
   const [loading, setLoading] = useState("");
-
+function handleBtn()
+{
+    toast.warn("Action not implemented yet.");
+}
   useEffect(() => {
     async function loadPatients() {
       const querySnatpshot = await getPatients()
@@ -63,7 +66,7 @@ export default function Dashboard() {
               <thead>
                 <tr>
                   <th scope="col">Patient</th>
-                  <th scope="col">Doctor</th>
+                  {/* <th scope="col">Doctor</th> */}
                   <th scope="col">Drugs</th>
                   <th scope="col">#</th>
                 </tr>
@@ -73,7 +76,7 @@ export default function Dashboard() {
                     return(
                       <tr key={index}>
                               <td data-label="Patient">{item.name} </td>
-                              <td data-label="Doctor">{user.email}</td>
+                              {/* <td data-label="Doctor">{user.email}</td> */}
                               <td data-label="Drugs">
                               {item.drugs.length==0 ? (
                                   <span className="badge" style={{ backgroundColor: "#999" }}>
@@ -88,16 +91,16 @@ export default function Dashboard() {
 
                               <td data-label="#">
                               <button
-                                className="action"
+                                className="action" onClick={handleBtn}
                                 style={{ backgroundColor: "#3583f6" }}
                               >
                                 <FiSearch color="#fff" size={17} />
                               </button>
-                              <button className="action">
+                              <button className="action" onClick={handleBtn} >
                                 <FiEdit2
                                 color="#fff"
                                 size={17}
-                                style={{ backgroundColor: "#f6a935" }}
+                                style={{ backgroundColor: "#f6a935"}}
                                 />
                               </button>
                               </td>

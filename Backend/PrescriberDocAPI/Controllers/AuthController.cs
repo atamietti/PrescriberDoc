@@ -145,7 +145,7 @@ public class AuthController : ControllerBase
                 issuer: "https://localhost:5001",
                 audience: "https://localhost:5001",
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30),
+                expires: DateTime.Now.AddDays(1),
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
 
             return new LoginResponse
