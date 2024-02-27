@@ -51,45 +51,54 @@ table tr {
     padding: 0.35em;
 }
 
-table th, table td {
+table th,
+table td {
     padding: 0.62m;
     text-align: center;
 }
 
-table th{
+table th {
     font-size: 0.85em;
     letter-spacing: 0.1em;
     text-transform: uppercase;
 }
 
-table td .action{
+table td .action {
     border: 0;
     padding: 5px;
     border-radius: 4px;
     margin-right: 3px;
 }
 
-table td .svg{
+table td .svg {
     vertical-align: middle;
 }
 
-table td .badge{
-    padding:3px;
+table td .badge {
+    padding: 3px;
     border-radius: 3px;
     color: #FFF;
     vertical-align: middle;
 
 }
 
-@media screen and (max-width: 600px){
-    table{
+
+.dashboard span {
+    margin: 2em 0;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 600px) {
+    table {
         border: 0;
     }
-    table caption{
+
+    table caption {
         font-size: 1.3em;
     }
 
-    table thead{
+    table thead {
         border: none;
         height: 1px;
         margin: -1px;
@@ -99,24 +108,29 @@ table td .badge{
         width: 1px;
     }
 
-    table tr{
-        border-bottom:  3px solid #DDD;
-        display:  block;
-        margin-bottom:  0.60em;
+    table tr {
+        border-bottom: 3px solid #DDD;
+        display: block;
+        margin-bottom: 0.60em;
     }
-    table td{
+
+    table td {
         border-bottom: 01px solid #DDD;
         display: block;
         height: 40px;
         font-size: 08.em;
         text-align: right;
-        
+
     }
 
-    table td::before{
+    table td::before {
         content: attr(data-label);
         float: left;
         font-weight: bold;
         text-transform: uppercase;
+
     }
+
+
+    
 }

@@ -198,6 +198,36 @@ function AuthProvider({ children }) {
     return null;
   }
 
+  async function getPatients() {
+
+    try {
+      let options = {
+        method: "GET",
+        headers: {
+          "Access-Control-Allow-Origin":"*",
+          "Access-Control-Allow-Headers":"Origin, X-Requested-With, Content-Type, Accept",
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + user.accessToken,
+        },
+        
+      };
+      const response = await fetch(PRESCRIBER_API.concat("patients"), options);
+      const data = await response.json();
+      if (!response.ok) {
+        throw new Error(data?.detail);
+      }
+
+      if (data.id !=="" ) {
+        return data;
+      }
+    } catch (error) {
+      toast.error("Ops! ".concat(error));
+      setLoadingAuth(false);
+      console.error("Ops! ", error);
+    }
+    return null;
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -210,7 +240,8 @@ function AuthProvider({ children }) {
         loading,
         createDrug,
         getDrugs,
-        createPatient
+        createPatient,
+        getPatients
       }}
     >
       {children}
