@@ -103,12 +103,19 @@ namespace PrescriberDocAPI
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+             
             }
 
             app.UseHttpsRedirection();
+
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseCors(builder => builder
+                   .AllowAnyHeader()
+                   .AllowAnyMethod()
+                   .AllowAnyOrigin()
+                );
 
             app.MapControllers();
 

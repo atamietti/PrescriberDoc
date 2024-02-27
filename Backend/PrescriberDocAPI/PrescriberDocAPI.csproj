@@ -10,6 +10,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Patients\Application\**" />
+    <Content Remove="Patients\Application\**" />
+    <EmbeddedResource Remove="Patients\Application\**" />
+    <None Remove="Patients\Application\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.Identity.MongoDbCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.16" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.7" />
@@ -17,10 +24,6 @@
     <PackageReference Include="MongoDB.Bson" Version="2.24.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.24.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Patients\Application\" />
   </ItemGroup>
 
 </Project>

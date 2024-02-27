@@ -70,6 +70,12 @@ public class AuthController : ControllerBase
     {
         try
         {
+            var roleName = "DOCTOR";
+            var role = await _roleManager.FindByNameAsync(roleName);
+
+            if (role == null)
+                await _roleManager.CreateAsync(new ApplicationRole { Name = roleName });
+
             var user = await _userManager.FindByEmailAsync(request.Email);
             if (user is not null) return new RegisterResponse { Message = "User already exists.", Success = false };
 
@@ -89,7 +95,7 @@ public class AuthController : ControllerBase
             };
 
 
-            var userInRole = await _userManager.AddToRoleAsync(user, "DOCTOR");
+            var userInRole = await _userManager.AddToRoleAsync(user, roleName);
             if (!userInRole.Succeeded) return new RegisterResponse
             {
                 Message = $"Create user succeded but could not add user to role. {string.Join(Environment.NewLine, userInRole?.Errors?.Select(f => f.Description) ?? new string[] { string.Empty })}",

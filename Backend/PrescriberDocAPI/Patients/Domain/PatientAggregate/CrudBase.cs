@@ -26,7 +26,7 @@ namespace PrescriberDocAPI.Patients.Domain
             .RequireAuthorization()
             .WithTags($"{type.Name}");
 
-            app.MapGet($"api/{type.Name.ToLower()}", async (IRepository<T> service) =>
+            app.MapGet($"api/{type.Name.ToLower()}s", async (IRepository<T> service) =>
             {
                 var result = await service.Get();
                 return !result.Any() ? Results.NotFound() : Results.Ok(result);
